@@ -1,12 +1,10 @@
 import {
   Column,
   Entity,
-  OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
-import { FitnessPrices } from './fitness_prices.entity';
 import { FitnessCenter } from './fitness_centers.entity';
 
 @Entity('FITNESS_PRICES_TABLE')
@@ -15,24 +13,15 @@ export class FitnessPricesTable {
   id: number;
 
   @Column()
-  title: string | null;
+  month: number;
 
   @Column()
-  order: number | null;
+  price: number;
 
   @Column()
-  one_day: boolean | null;
+  order: number;
 
-  @OneToMany(
-    () => FitnessPrices,
-    (fitnessPrice) => fitnessPrice.fitnessPriceTable,
-    {
-      cascade: true,
-    },
-  )
-  fitnessPrices: FitnessPrices[] | null;
-
-  @OneToOne(() => FitnessCenter, (fitnessCenter) => fitnessCenter.pricesTable)
+  @ManyToOne(() => FitnessCenter, (fitnessCenter) => fitnessCenter.pricesTable)
   @JoinColumn()
   fitnessCenter: FitnessCenter;
 }

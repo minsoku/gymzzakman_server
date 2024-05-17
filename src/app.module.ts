@@ -17,7 +17,6 @@ import { REACTIONS } from './posts/entities/reaction.entity';
 import { POSTS } from './posts/entities/post.entity';
 import { COMMENTS } from './comments/entites/comment.entity';
 import { FitnessPricesTable } from './fitness_centers/entites/fitness_prices_table.entity';
-import { FitnessPrices } from './fitness_centers/entites/fitness_prices.entity';
 
 @Module({
   imports: [
@@ -45,7 +44,6 @@ import { FitnessPrices } from './fitness_centers/entites/fitness_prices.entity';
         FitnessCoach,
         FitnessInformation,
         FitnessPricesTable,
-        FitnessPrices,
       ],
       synchronize: process.env['DB_SYNCHRONIZE'] === 'true',
     }),

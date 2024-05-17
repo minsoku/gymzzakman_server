@@ -9,7 +9,6 @@ import { FitnessCoach } from './fitness_coaches.entity';
 import { FitnessInformation } from './fitness_informations.entity';
 import { FitnessCoverImage } from './fitness_cover_images.entity';
 import { FitnessPricesTable } from './fitness_prices_table.entity';
-import { JoinColumn } from "typeorm/browser";
 
 @Entity('FITNESS_CENTERS')
 export class FitnessCenter {
@@ -19,32 +18,24 @@ export class FitnessCenter {
   @Column()
   name: string;
 
-  @Column({ name: 'for_women' })
-  forWomen: boolean;
-
-  @Column({ name: 'gym_type' })
-  gymType: string;
-
-  @Column()
-  calorie: number;
-
   @Column({ name: 'profile_image' })
   profileImage: string;
 
   @Column({ name: 'short_addr' })
   shortAddr: string;
 
-  @Column()
+  // 위도
+  @Column('decimal', { precision: 10, scale: 8, name: 'lat' })
   lat: number;
-
-  @Column()
+  // 경도
+  @Column('decimal', { precision: 11, scale: 8, name: 'lng' })
   lng: number;
 
   @Column({ name: 'phone_number' })
   phoneNumber: string;
 
   @Column({ name: 'safe_number' })
-  safeNumber: string;
+  safeNumber: string | null;
 
   @Column()
   address: string;
@@ -61,6 +52,6 @@ export class FitnessCenter {
   @OneToMany(() => FitnessCoach, (coach) => coach.fitnessCenter)
   coaches: FitnessCoach[] | null;
 
-  @OneToOne(() => FitnessPricesTable, (priceTable) => priceTable.fitnessCenter)
+  @OneToMany(() => FitnessPricesTable, (priceTable) => priceTable.fitnessCenter)
   pricesTable: FitnessPricesTable | null;
 }
