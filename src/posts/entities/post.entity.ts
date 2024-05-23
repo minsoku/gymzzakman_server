@@ -5,6 +5,7 @@ import { USERS } from '../../users/entities/user.entity';
 import { BASE } from '../../common/entities/base.entity';
 import { REACTIONS } from './reaction.entity';
 import { COMMENTS } from '../../comments/entites/comment.entity';
+import { POSTS_IMAGES } from './post_images.entity';
 
 @Entity('POSTS')
 export class POSTS extends BASE {
@@ -22,6 +23,9 @@ export class POSTS extends BASE {
     cascade: true,
   })
   comments: COMMENTS[];
+
+  @OneToMany('POSTS_IMAGES', 'post')
+  images: POSTS_IMAGES[];
 
   @Column()
   @IsString({
@@ -65,12 +69,12 @@ export class POSTS extends BASE {
   })
   type: string;
 
-  @Column({
-    type: 'varchar',
-    length: 255,
-    nullable: true,
-  })
-  images: string;
+  // 위도
+  @Column('decimal', { precision: 10, scale: 8, name: 'lat' })
+  lat: number;
+  // 경도
+  @Column('decimal', { precision: 11, scale: 8, name: 'lng' })
+  lng: number;
 
   isLiked: boolean;
   isDisLiked: boolean;

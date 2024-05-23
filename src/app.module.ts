@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -17,6 +17,12 @@ import { REACTIONS } from './posts/entities/reaction.entity';
 import { POSTS } from './posts/entities/post.entity';
 import { COMMENTS } from './comments/entites/comment.entity';
 import { FitnessPricesTable } from './fitness_centers/entites/fitness_prices_table.entity';
+import { AuthModule } from './auth/auth.module';
+import { AwsModule } from './aws/aws.module';
+import { UtilModule } from './util/util.module';
+import { UtilService } from './util/util.service';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { POSTS_IMAGES } from "./posts/entities/post_images.entity";
 
 @Module({
   imports: [
@@ -37,6 +43,7 @@ import { FitnessPricesTable } from './fitness_centers/entites/fitness_prices_tab
       entities: [
         USERS,
         POSTS,
+        POSTS_IMAGES,
         COMMENTS,
         REACTIONS,
         FitnessCenter,
@@ -52,8 +59,18 @@ import { FitnessPricesTable } from './fitness_centers/entites/fitness_prices_tab
     FitnessCentersModule,
     PostsModule,
     CommentsModule,
+    AuthModule,
+    AwsModule,
+    UtilModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    UtilService,
+    {
+      provide: APP_INTERCEPTOR, // 모든 응답에 대해 ClassSerializerInterceptor를 적용
+      useClass: ClassSerializerInterceptor, // ClassSerializerInterceptor는 응답을 serialize 해준다.
+    },
+  ],
 })
 export class AppModule {}
