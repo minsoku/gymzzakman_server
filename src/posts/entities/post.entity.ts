@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { IsString } from 'class-validator';
 import { stringValidationMessage } from '../../common/validation-message/string-validation.message';
 import { USERS } from '../../users/entities/user.entity';
@@ -6,6 +6,7 @@ import { BASE } from '../../common/entities/base.entity';
 import { REACTIONS } from './reaction.entity';
 import { COMMENTS } from '../../comments/entites/comment.entity';
 import { POSTS_IMAGES } from './post_images.entity';
+import { HASHTAGS } from './hashtags.entity';
 
 @Entity('POSTS')
 export class POSTS extends BASE {
@@ -24,7 +25,11 @@ export class POSTS extends BASE {
   })
   comments: COMMENTS[];
 
-  @OneToMany('POSTS_IMAGES', 'post')
+  @ManyToMany(() => HASHTAGS, (hashtag) => hashtag.posts)
+  @JoinTable()
+  hashtags: HASHTAGS[];
+
+  @OneToMany('POSTS_IMAGES', 'posts')
   images: POSTS_IMAGES[];
 
   @Column()
@@ -60,21 +65,21 @@ export class POSTS extends BASE {
     type: 'enum',
     nullable: false,
     enum: [
-      'INFORMATION', // 정보
-      'AMITY', // 친목
-      'CERTIFICATIONS', // 인증
+      'INFORMATION', // 정보공유
+      'AMITY', // 우리동네
+      'CERTIFICATIONS', // 운동인증
       'FAQ', // 질문
     ],
     default: 'INFORMATION',
   })
-  type: string;
+  category: string;
 
   // 위도
-  @Column('decimal', { precision: 10, scale: 8, name: 'lat' })
-  lat: number;
+  @Column()
+  lat: string;
   // 경도
-  @Column('decimal', { precision: 11, scale: 8, name: 'lng' })
-  lng: number;
+  @Column()
+  lng: string;
 
   isLiked: boolean;
   isDisLiked: boolean;

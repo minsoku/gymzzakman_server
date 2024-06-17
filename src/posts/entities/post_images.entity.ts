@@ -11,5 +11,5 @@ export class POSTS_IMAGES extends BASE {
   order: number;
 
   @ManyToOne(() => POSTS, (post) => post.images)
-  post: POSTS;
+  posts: POSTS;
 }

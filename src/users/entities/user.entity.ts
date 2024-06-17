@@ -40,6 +40,12 @@ export class USERS extends BASE {
   })
   password: string;
 
+  @Column({ length: 20, unique: true })
+  @IsString({
+    message: stringValidationMessage,
+  })
+  phoneNumber: string;
+
   @Column({
     type: 'enum',
     enum: ['USER', 'ADMIN'],

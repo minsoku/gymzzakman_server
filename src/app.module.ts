@@ -22,7 +22,8 @@ import { AwsModule } from './aws/aws.module';
 import { UtilModule } from './util/util.module';
 import { UtilService } from './util/util.service';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { POSTS_IMAGES } from "./posts/entities/post_images.entity";
+import { POSTS_IMAGES } from './posts/entities/post_images.entity';
+import { HASHTAGS } from './posts/entities/hashtags.entity';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { POSTS_IMAGES } from "./posts/entities/post_images.entity";
         POSTS_IMAGES,
         COMMENTS,
         REACTIONS,
+        HASHTAGS,
         FitnessCenter,
         FitnessCoverImage,
         FitnessCoach,
