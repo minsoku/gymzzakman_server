@@ -18,7 +18,7 @@ export class UsersService {
   }
 
   async createUser(
-    user: Pick<USERS, 'nickname' | 'email' | 'password'>,
+    user: Pick<USERS, 'nickname' | 'email' | 'password' | 'phoneNumber'>,
     hash: string,
     file: Express.Multer.File,
   ) {
@@ -38,12 +38,21 @@ export class UsersService {
     if (emailExists) {
       throw new BadRequestException('EXIST_EMAIL');
     }
+    const phoneExists = await this.usersRepository.exists({
+      where: {
+        phoneNumber: user.phoneNumber
+      }
+    })
+    if (phoneExists) {
+      throw new BadRequestException('EXIST_PHONE');
+    }
     const profileImageUpload = await this.awsService.saveImage(file, 'profile');
 
     const userObject = this.usersRepository.create({
       nickname: user.nickname,
       email: user.email,
       password: hash,
+      phoneNumber: user.phoneNumber,
       profileImage: profileImageUpload,
     });
 

@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { BasePaginationDto } from './dto/base-pagination.dto';
 import {
+  Brackets,
   FindManyOptions,
   FindOptionsOrder,
   FindOptionsWhere,
@@ -13,6 +14,7 @@ import { REACTIONS } from '../posts/entities/reaction.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FILTER_MAPPER } from './const/filter-mapper.const';
 import { VoteBooleanType } from './types/vote.type';
+import { categoryArr } from './const/categoryArr';
 
 @Injectable()
 export class CommonService {
@@ -35,23 +37,26 @@ export class CommonService {
     repository: Repository<T>,
   ) {
     const findOptions = this.composeFindOptions<T>(dto);
-
     const [data, count] = await repository
       .createQueryBuilder('posts')
-      .leftJoinAndSelect('review_post.author', 'user')
+      .leftJoinAndSelect('posts.author', 'user')
+      .leftJoinAndSelect('posts.hashtags', 'hashtags')
       .select([
-        'review_post.id',
-        'review_post.title',
-        'review_post.content',
-        'review_post.createdAt',
-        'review_post.viewCount',
-        'review_post.likeCount',
+        'posts.id',
+        'posts.title',
+        'posts.content',
+        'posts.category',
+        'posts.createdAt',
+        'posts.viewCount',
+        'posts.likeCount',
         'user.id',
         'user.nickname',
+        'user.profileImage',
+        'hashtags',
       ])
       .where(findOptions.where)
       .orderBy(
-        'review_post.' + Object.keys(findOptions.order)[0],
+        'posts.' + Object.keys(findOptions.order)[0],
         Object.values(findOptions.order)[0],
       )
       .skip(findOptions.skip)
@@ -60,12 +65,11 @@ export class CommonService {
 
     await Promise.all(
       data.map(async (post: any) => {
-        const likeCount = await this.reactionRepository
+        post.likeCount = await this.reactionRepository
           .createQueryBuilder('reaction')
           .where('reaction.postId = :postId', { postId: post.id })
           .andWhere('reaction.isLiked = true')
           .getCount();
-        post.likeCount = likeCount;
         return post;
       }),
     );
@@ -80,7 +84,6 @@ export class CommonService {
   ): FindManyOptions<T> {
     let where: FindOptionsWhere<T> = {};
     let order: FindOptionsOrder<T> = {};
-
     for (const [key, value] of Object.entries(dto)) {
       if (key.startsWith('where__')) {
         where = {
@@ -91,6 +94,11 @@ export class CommonService {
         order = {
           ...order,
           ...this.parseWhereFilter(key, value),
+        };
+      } else if (key === 'category' && categoryArr.indexOf(value) >= 0) {
+        where = {
+          ...where,
+          category: value,
         };
       }
     }
@@ -130,7 +138,6 @@ export class CommonService {
         options[field] = FILTER_MAPPER[operator](value);
       }
     }
-
     return options;
   }
 

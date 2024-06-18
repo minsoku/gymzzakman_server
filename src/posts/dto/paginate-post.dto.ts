@@ -9,4 +9,7 @@ export class PaginatePostDto extends BasePaginationDto {
   @IsString()
   @IsOptional()
   where__title__i_like: string;
+
+  @IsOptional()
+  category: string;
 }

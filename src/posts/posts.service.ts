@@ -53,7 +53,7 @@ export class PostsService {
     });
 
     if (!post) {
-      throw new HttpException('REVIEW_POST_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException('POSTS_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
 
     const likeCount = await this.reactionsRepository
@@ -75,14 +75,20 @@ export class PostsService {
 
   async getPostByIdWithUser(id: number, userId: number) {
     const post = await this.postsRepository.findOne({
-      relations: ['author', 'images', 'comments', 'comments.author'],
+      relations: [
+        'author',
+        'images',
+        'comments',
+        'comments.author',
+        'hashtags',
+      ],
       where: {
         id,
       },
     });
 
     if (!post) {
-      throw new HttpException('REVIEW_POST_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException('POSTS_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
 
     const likeCount = await this.reactionsRepository
@@ -132,10 +138,11 @@ export class PostsService {
   ) {
     const images = [];
     for (let i = 0; i < files.length; i++) {
-      const image = await this.awsService.saveImage(files[i], 'profile');
+      const image = await this.awsService.saveImage(files[i], 'posts');
       const imageModel = await this.commonService.saveReviewPostImage(image, i);
       images.push(imageModel);
     }
+
     const repository = this.getRepository(qr);
 
     const existingHashtags = postDto.hashtags

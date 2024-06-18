@@ -19,10 +19,11 @@ export class BasePaginationDto {
   // createAt -> 생성된 시간 내림차/"오름차" 순으로 정렬
   @IsIn(['ASC', 'DESC'])
   @IsOptional()
-  order__createdAt?: 'ASC' | 'DESC' = 'ASC';
+  order__createdAt?: 'ASC' | 'DESC' = 'DESC';
 
   // 몇 개의 데이터를 응답으로 받을 지
   @IsNumber()
   @IsOptional()
-  take: number = 20;
+  take: number = 10;
+
 }
