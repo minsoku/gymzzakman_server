@@ -12,4 +12,7 @@ export class PaginatePostDto extends BasePaginationDto {
 
   @IsOptional()
   category: string;
+
+  @IsOptional()
+  search: string;
 }

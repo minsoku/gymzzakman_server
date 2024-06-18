@@ -55,6 +55,9 @@ export class CommonService {
         'hashtags',
       ])
       .where(findOptions.where)
+      // .andWhere((qb) => {
+      //   return qb.where('posts.content LIKE :content', {content: "%a%"})
+      // })
       .orderBy(
         'posts.' + Object.keys(findOptions.order)[0],
         Object.values(findOptions.order)[0],
@@ -99,6 +102,12 @@ export class CommonService {
         where = {
           ...where,
           category: value,
+        };
+      } else if (key === 'search') {
+        console.log(key, value)
+        where = {
+          ...where,
+          content: FILTER_MAPPER.i_like(`%${value}%`),
         };
       }
     }
