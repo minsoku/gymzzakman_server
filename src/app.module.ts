@@ -9,7 +9,6 @@ import { FitnessCentersModule } from './fitness_centers/fitness_centers.module';
 import { USERS } from './users/entities/user.entity';
 import { FitnessCenter } from './fitness_centers/entites/fitness_centers.entity';
 import { FitnessCoverImage } from './fitness_centers/entites/fitness_cover_images.entity';
-import { FitnessCoach } from './fitness_centers/entites/fitness_coaches.entity';
 import { FitnessInformation } from './fitness_centers/entites/fitness_informations.entity';
 import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
@@ -50,7 +49,6 @@ import { HASHTAGS } from './posts/entities/hashtags.entity';
         HASHTAGS,
         FitnessCenter,
         FitnessCoverImage,
-        FitnessCoach,
         FitnessInformation,
         FitnessPricesTable,
       ],

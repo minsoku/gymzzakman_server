@@ -5,7 +5,6 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
-import { FitnessCoach } from './fitness_coaches.entity';
 import { FitnessInformation } from './fitness_informations.entity';
 import { FitnessCoverImage } from './fitness_cover_images.entity';
 import { FitnessPricesTable } from './fitness_prices_table.entity';
@@ -49,8 +48,6 @@ export class FitnessCenter {
   )
   informations: FitnessInformation | null;
 
-  @OneToMany(() => FitnessCoach, (coach) => coach.fitnessCenter)
-  coaches: FitnessCoach[] | null;
 
   @OneToMany(() => FitnessPricesTable, (priceTable) => priceTable.fitnessCenter)
   pricesTable: FitnessPricesTable | null;
