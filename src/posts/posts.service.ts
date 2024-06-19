@@ -144,7 +144,6 @@ export class PostsService {
     }
 
     const repository = this.getRepository(qr);
-
     const existingHashtags = postDto.hashtags
       ? await this.getOrCreateHashtags(postDto.hashtags)
       : null;
@@ -166,6 +165,9 @@ export class PostsService {
   }
 
   private async getOrCreateHashtags(hashtags: string[]): Promise<HASHTAGS[]> {
+    if (!Array.isArray(hashtags)) {
+      hashtags = [hashtags];
+    }
     const existingHashtags = await this.hashtagsRepository.findByIds(hashtags);
     const newHashtags = hashtags
       .filter((name) => !existingHashtags.some((h) => h.name === name))
