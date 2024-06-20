@@ -11,7 +11,6 @@ export class AccessTokenGuard extends BearerTokenGuard {
     await super.canActivate(context);
 
     const req = context.switchToHttp().getRequest();
-
     if (req.tokenType !== 'access') {
       throw new UnauthorizedException('Access Token이 아닙니다.');
     }

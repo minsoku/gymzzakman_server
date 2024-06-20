@@ -41,6 +41,8 @@ export class CommonService {
       .createQueryBuilder('posts')
       .leftJoinAndSelect('posts.author', 'user')
       .leftJoinAndSelect('posts.hashtags', 'hashtags')
+      .leftJoinAndSelect('posts.comments', 'comments')
+      .leftJoinAndSelect('comments.author', 'commentAuthor')
       .select([
         'posts.id',
         'posts.title',
@@ -53,6 +55,9 @@ export class CommonService {
         'user.nickname',
         'user.profileImage',
         'hashtags',
+        'comments',
+        'commentAuthor.nickname',
+        'commentAuthor.profileImage',
       ])
       .where(findOptions.where)
       .orderBy(

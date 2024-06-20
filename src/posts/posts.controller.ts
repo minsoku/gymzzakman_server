@@ -58,10 +58,7 @@ export class PostsController {
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
     if (body.title === '' || body.content === '' || body.category === '') {
-      throw new HttpException(
-        'NOT_VALID_INPUT_VALUE',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('NOT_VALID_INPUT_VALUE', HttpStatus.BAD_REQUEST);
     }
 
     const post = await this.postsService.createPost(userId, body, qr, files);
