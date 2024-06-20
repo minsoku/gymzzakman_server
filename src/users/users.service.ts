@@ -57,6 +57,7 @@ export class UsersService {
     });
 
     const newUser = await this.usersRepository.save(userObject);
+    console.log("newUser", newUser);
     const userWithoutPassword = classToPlain(newUser);
     return {
       success: true,
