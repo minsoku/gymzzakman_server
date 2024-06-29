@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { BasePaginationDto } from './dto/base-pagination.dto';
 import {
-  Brackets,
   FindManyOptions,
   FindOptionsOrder,
   FindOptionsWhere,
@@ -24,6 +23,7 @@ export class CommonService {
     @InjectRepository(REACTIONS)
     private readonly reactionRepository: Repository<REACTIONS>,
   ) {}
+
   async saveReviewPostImage(url: string, order: number) {
     const image = this.imageRepository.create({
       url,
